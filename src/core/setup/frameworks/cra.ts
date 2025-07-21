@@ -4,17 +4,12 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import { CertificateResult } from '../../../types/certificate.types.js';
 
 /**
  * Configure a Create React App project to use HTTPS
  * @param projectPath - Path to the project
- * @param certPaths - Paths to the certificates
  */
-export async function setupCRA(
-  projectPath: string,
-  certPaths: CertificateResult
-): Promise<void> {
+export async function setupCRA(projectPath: string): Promise<void> {
   console.log(chalk.blue('Configuring Create React App...'));
 
   // Create a .env file at the project root
@@ -27,9 +22,5 @@ SSL_KEY_FILE=ssl/key.pem
 
   await fs.writeFile(envPath, envContent);
 
-  console.log(
-    chalk.green(
-      'Create React App configured! Use "npm start" to start with HTTPS.'
-    )
-  );
+  console.log(chalk.green('Create React App configured! Use "npm start" to start with HTTPS.'));
 }

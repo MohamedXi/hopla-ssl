@@ -1,14 +1,13 @@
 /**
- * Module d'utilitaires pour les opérations sur les fichiers
+ * Module of utilities for file operations
  */
 import fs from 'fs-extra';
-import path from 'path';
+import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
 /**
- * Obtient le chemin du répertoire actuel en utilisant ESM
- * @returns Le chemin du répertoire actuel
+ * Gets the current directory using ESM
+ * @returns The current directory
  */
 export function getCurrentDir(): string {
   const __filename = fileURLToPath(import.meta.url);
@@ -16,8 +15,8 @@ export function getCurrentDir(): string {
 }
 
 /**
- * Lit la version depuis package.json
- * @returns La version du package
+ * Gets the version from package.json
+ * @returns The package version
  */
 export async function getPackageVersion(): Promise<string> {
   const packageJsonPath = path.join(getCurrentDir(), 'package.json');
@@ -26,9 +25,9 @@ export async function getPackageVersion(): Promise<string> {
 }
 
 /**
- * Vérifie si un fichier existe
- * @param filePath - Chemin du fichier
- * @returns true si le fichier existe, false sinon
+ * Checks if a file exists
+ * @param filePath - File path
+ * @returns true if the file exists, false otherwise
  */
 export async function fileExists(filePath: string): Promise<boolean> {
   try {
@@ -40,26 +39,26 @@ export async function fileExists(filePath: string): Promise<boolean> {
 }
 
 /**
- * Crée un répertoire s'il n'existe pas
- * @param dirPath - Chemin du répertoire
+ * Creates a directory if it doesn't exist
+ * @param dirPath - Directory path
  */
 export async function ensureDir(dirPath: string): Promise<void> {
   await fs.ensureDir(dirPath);
 }
 
 /**
- * Lit un fichier JSON
- * @param filePath - Chemin du fichier
- * @returns Le contenu du fichier JSON
+ * Reads a JSON file
+ * @param filePath - File path
+ * @returns The content of the JSON file
  */
 export async function readJsonFile<T>(filePath: string): Promise<T> {
   return await fs.readJson(filePath);
 }
 
 /**
- * Écrit un fichier JSON
- * @param filePath - Chemin du fichier
- * @param data - Données à écrire
+ * Writes a JSON file
+ * @param filePath - File path
+ * @param data - Data to write
  */
 export async function writeJsonFile<T>(filePath: string, data: T): Promise<void> {
   await fs.writeJson(filePath, data, { spaces: 2 });

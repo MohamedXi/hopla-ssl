@@ -1,10 +1,10 @@
 /**
- * Types pour la configuration des projets
+ * Types for project configuration
  */
 import { FrameworkType } from './framework.types.js';
 
 /**
- * Options pour la configuration d'un projet
+ * Options for project configuration
  */
 export interface SetupProjectOptions {
   projectPath: string;
@@ -18,7 +18,7 @@ export interface SetupProjectOptions {
 }
 
 /**
- * Options pour la commande setup
+ * Options for the setup command
  */
 export interface SetupCommandOptions {
   path: string;

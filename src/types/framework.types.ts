@@ -1,11 +1,11 @@
 /**
- * Types pour les frameworks supportés
+ * Types for supported frameworks
  */
 
 /**
- * Types de frameworks supportés
+ * Types of supported frameworks
  */
-export type FrameworkType = 
+export type FrameworkType =
   | 'nextjs'
   | 'create-react-app'
   | 'angular'
@@ -18,7 +18,7 @@ export type FrameworkType =
   | 'other';
 
 /**
- * Type pour les choix de framework dans l'interface utilisateur
+ * Type for framework choices in the user interface
  */
 export interface FrameworkChoice {
   name: string;
@@ -26,7 +26,7 @@ export interface FrameworkChoice {
 }
 
 /**
- * Structure de package.json
+ * Structure of package.json
  */
 export interface PackageJson {
   name?: string;
@@ -34,5 +34,5 @@ export interface PackageJson {
   dependencies?: Record<string, string>;
   devDependencies?: Record<string, string>;
   scripts?: Record<string, string>;
-  [key: string]: any;
+  [key: string]: unknown;
 }

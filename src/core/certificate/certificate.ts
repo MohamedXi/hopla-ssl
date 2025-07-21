@@ -38,8 +38,10 @@ export async function generateCertificate(
     const cert = await mkcert.createCert({
       domains: [domain, `*.${domain}`, 'localhost', '127.0.0.1', '::1'],
       validity: options?.validity || 365,
-      caKey: ca.key,
-      caCert: ca.cert,
+      ca: {
+        key: ca.key,
+        cert: ca.cert,
+      },
     } as any);
 
     // File paths
@@ -64,10 +66,7 @@ export async function generateCertificate(
       ca: caPath,
     };
   } catch (error) {
-    console.error(
-      chalk.red('Error generating certificate:'),
-      error
-    );
+    console.error(chalk.red('Error generating certificate:'), error);
     throw error;
   }
 }

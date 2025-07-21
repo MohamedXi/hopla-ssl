@@ -18,7 +18,7 @@ export async function promptFramework(): Promise<FrameworkType> {
     { name: 'Svelte', value: 'svelte' },
     { name: 'Vite', value: 'vite' },
     { name: 'Webpack', value: 'webpack' },
-    { name: 'Other', value: 'other' }
+    { name: 'Other', value: 'other' },
   ];
 
   const { framework } = await inquirer.prompt<{ framework: FrameworkType }>([
@@ -26,9 +26,9 @@ export async function promptFramework(): Promise<FrameworkType> {
       type: 'list',
       name: 'framework',
       message: 'Select your framework:',
-      choices
-    }
+      choices,
+    },
   ]);
-  
+
   return framework;
 }

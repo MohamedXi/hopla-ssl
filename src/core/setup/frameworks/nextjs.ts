@@ -4,18 +4,13 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import { CertificateResult } from '../../../types/certificate.types.js';
 import { PackageJson } from '../../../types/framework.types.js';
 
 /**
  * Configure a Next.js project to use HTTPS
  * @param projectPath - Path to the project
- * @param certPaths - Paths to the certificates
  */
-export async function setupNextJs(
-  projectPath: string,
-  certPaths: CertificateResult
-): Promise<void> {
+export async function setupNextJs(projectPath: string): Promise<void> {
   console.log(chalk.blue('Configuring Next.js...'));
 
   // Create server.js file at the project root
@@ -61,9 +56,5 @@ app.prepare().then(() => {
 
   await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
 
-  console.log(
-    chalk.green(
-      'Next.js configured! Use "npm run dev:https" to start with HTTPS.'
-    )
-  );
+  console.log(chalk.green('Next.js configured! Use "npm run dev:https" to start with HTTPS.'));
 }

@@ -23,22 +23,18 @@ export function configureGenerateCommand(program: Command): void {
     .option('--validity <days>', 'Certificate validity in days', '365')
     .action(async (options: GenerateCommandOptions) => {
       try {
-        console.log(chalk.blue("🔐 Generating SSL certificate..."));
+        console.log(chalk.blue('🔐 Generating SSL certificate...'));
 
         // Convertir validity en nombre si fourni
         const validity = options.validity ? parseInt(options.validity, 10) : undefined;
-        
-        const result = await generateCertificate(
-          options.domain,
-          options.output,
-          {
-            organization: options.org,
-            countryCode: options.country,
-            state: options.state,
-            locality: options.locality,
-            validity
-          }
-        );
+
+        const result = await generateCertificate(options.domain, options.output, {
+          organization: options.org,
+          countryCode: options.country,
+          state: options.state,
+          locality: options.locality,
+          validity,
+        });
 
         console.log(chalk.green('✅ Certificate successfully generated!'));
         console.log(chalk.yellow('📁 Files created:'));
@@ -48,10 +44,7 @@ export function configureGenerateCommand(program: Command): void {
           console.log(chalk.yellow(`- CA Certificate: ${result.ca}`));
         }
       } catch (error) {
-        console.error(
-          chalk.red('❌ Error generating certificate:'),
-          error
-        );
+        console.error(chalk.red('❌ Error generating certificate:'), error);
         process.exit(1);
       }
     });

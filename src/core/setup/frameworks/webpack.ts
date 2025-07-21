@@ -1,23 +1,18 @@
 /**
- * Module de configuration pour Webpack
+ * Configuration module for Webpack
  */
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import { CertificateResult } from '../../../types/certificate.types.js';
 
 /**
- * Configure un projet Webpack pour utiliser HTTPS
- * @param projectPath - Chemin vers le projet
- * @param certPaths - Chemins vers les certificats
+ * Configure a Webpack project to use HTTPS
+ * @param projectPath - Path to the project
  */
-export async function setupWebpack(
-  projectPath: string,
-  certPaths: CertificateResult
-): Promise<void> {
-  console.log(chalk.blue('Configuration de Webpack...'));
+export async function setupWebpack(projectPath: string): Promise<void> {
+  console.log(chalk.blue('Configuring Webpack...'));
 
-  // Chercher le fichier de configuration webpack
+  // Look for the webpack configuration file
   const webpackConfigPaths = [
     path.join(projectPath, 'webpack.config.js'),
     path.join(projectPath, 'webpack.dev.js'),
@@ -34,63 +29,66 @@ export async function setupWebpack(
   }
 
   if (configPath) {
-    // Modifier le fichier de configuration webpack existant
+    // Modify the existing webpack configuration file
     let webpackConfig = await fs.readFile(configPath, 'utf-8');
 
-    // Ajouter la configuration HTTPS si elle n'existe pas déjà
+    // Add HTTPS configuration if it doesn't already exist
     if (!webpackConfig.includes('https:')) {
       const importStatement = `const fs = require('fs');\nconst path = require('path');\n`;
-      
-      // Ajouter les imports si nécessaire
+
+      // Add imports if necessary
       if (!webpackConfig.includes('const fs =') && !webpackConfig.includes('import fs from')) {
         webpackConfig = importStatement + webpackConfig;
       }
-      
-      // Chercher la configuration du serveur de développement
+
+      // Look for the development server configuration
       if (webpackConfig.includes('devServer:')) {
-        // Trouver la position de devServer
+        // Find the position of devServer
         const devServerPos = webpackConfig.indexOf('devServer:');
         const openBracePos = webpackConfig.indexOf('{', devServerPos);
-        
+
         if (openBracePos !== -1) {
-          // Insérer la configuration HTTPS après l'ouverture de l'accolade
-          webpackConfig = webpackConfig.slice(0, openBracePos + 1) + `
+          // Insert HTTPS configuration after the opening brace
+          webpackConfig =
+            webpackConfig.slice(0, openBracePos + 1) +
+            `
       https: {
-        key: fs.readFileSync(path.resolve(__dirname, 'ssl/key.pem')),
-        cert: fs.readFileSync(path.resolve(__dirname, 'ssl/cert.pem')),
-      },` + webpackConfig.slice(openBracePos + 1);
+        key: fs.readFileSync('./ssl/key.pem'),
+        cert: fs.readFileSync('./ssl/cert.pem'),
+      },` +
+            webpackConfig.slice(openBracePos + 1);
         }
       } else {
-        // Ajouter une configuration devServer si elle n'existe pas
+        // Add a devServer configuration if it doesn't exist
         if (webpackConfig.includes('module.exports = {')) {
           webpackConfig = webpackConfig.replace(
             'module.exports = {',
             `module.exports = {
   devServer: {
     https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'ssl/key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'ssl/cert.pem')),
+      key: fs.readFileSync('./ssl/key.pem'),
+      cert: fs.readFileSync('./ssl/cert.pem'),
     },
   },`
           );
         }
       }
-      
+
       await fs.writeFile(configPath, webpackConfig);
     }
   } else {
-    // Créer un nouveau fichier de configuration webpack
+    // Create a new webpack configuration file
     const webpackConfigPath = path.join(projectPath, 'webpack.config.js');
     const webpackConfigContent = `
 const fs = require('fs');
 const path = require('path');
 
 module.exports = {
-  // Votre configuration webpack existante
+  // Your existing webpack configuration
   devServer: {
     https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'ssl/key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'ssl/cert.pem')),
+      key: fs.readFileSync('./ssl/key.pem'),
+      cert: fs.readFileSync('./ssl/cert.pem'),
     },
     hot: true,
     historyApiFallback: true,
@@ -101,24 +99,20 @@ module.exports = {
     await fs.writeFile(webpackConfigPath, webpackConfigContent);
   }
 
-  // Mettre à jour package.json pour ajouter un script de démarrage HTTPS
+  // Update package.json to add an HTTPS startup script
   const packageJsonPath = path.join(projectPath, 'package.json');
   if (await fs.pathExists(packageJsonPath)) {
     const packageJson = await fs.readJson(packageJsonPath);
-    
+
     if (!packageJson.scripts) {
       packageJson.scripts = {};
     }
-    
-    // Ajouter un script pour démarrer avec HTTPS
+
+    // Add a script to start with HTTPS
     packageJson.scripts['start:https'] = 'webpack serve --https';
-    
+
     await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
   }
 
-  console.log(
-    chalk.green(
-      'Webpack configuré! Utilisez "npm run start:https" pour démarrer avec HTTPS.'
-    )
-  );
+  console.log(chalk.green('Webpack configured! Use "npm run start:https" to start with HTTPS.'));
 }

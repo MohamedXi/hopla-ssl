@@ -1,33 +1,26 @@
 /**
- * Module de configuration pour Vite
+ * Configuration module for Vite
  */
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import path from 'path';
-import { CertificateResult } from '../../../types/certificate.types.js';
 
 /**
- * Configure un projet Vite pour utiliser HTTPS
- * @param projectPath - Chemin vers le projet
- * @param certPaths - Chemins vers les certificats
+ * Configure a Vite project to use HTTPS
+ * @param projectPath - Path to the project
  */
-export async function setupVite(
-  projectPath: string,
-  certPaths: CertificateResult
-): Promise<void> {
-  console.log(chalk.blue('Configuration de Vite...'));
+export async function setupVite(projectPath: string): Promise<void> {
+  console.log(chalk.blue('Configuring Vite...'));
 
-  // Créer ou mettre à jour vite.config.js/ts
+  // Create or update vite.config.js/ts
   const viteConfigJsPath = path.join(projectPath, 'vite.config.js');
   const viteConfigTsPath = path.join(projectPath, 'vite.config.ts');
-  
-  const configPath = await fs.pathExists(viteConfigTsPath) 
-    ? viteConfigTsPath 
-    : viteConfigJsPath;
-  
+
+  const configPath = (await fs.pathExists(viteConfigTsPath)) ? viteConfigTsPath : viteConfigJsPath;
+
   const isTypeScript = configPath === viteConfigTsPath;
-  
-  const viteConfigContent = isTypeScript 
+
+  const viteConfigContent = isTypeScript
     ? `
 import { defineConfig } from 'vite';
 import fs from 'fs';
@@ -36,8 +29,8 @@ import path from 'path';
 export default defineConfig({
   server: {
     https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'ssl/key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'ssl/cert.pem')),
+      key: fs.readFileSync('./ssl/key.pem'),
+      cert: fs.readFileSync('./ssl/cert.pem'),
     }
   }
 });
@@ -50,50 +43,46 @@ import path from 'path';
 export default defineConfig({
   server: {
     https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'ssl/key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'ssl/cert.pem')),
+      key: fs.readFileSync('./ssl/key.pem'),
+      cert: fs.readFileSync('./ssl/cert.pem'),
     }
   }
 });
 `;
 
-  // Si le fichier de configuration n'existe pas, le créer
-  if (!await fs.pathExists(configPath)) {
+  // If the configuration file doesn't exist, create it
+  if (!(await fs.pathExists(configPath))) {
     await fs.writeFile(isTypeScript ? viteConfigTsPath : viteConfigJsPath, viteConfigContent);
   } else {
-    // Si le fichier existe, essayer de le modifier
+    // If the file exists, try to modify it
     let existingConfig = await fs.readFile(configPath, 'utf-8');
-    
+
     if (!existingConfig.includes('https:')) {
-      // Remplacer defineConfig({ par defineConfig({ server: { https: { ... }},
+      // Replace defineConfig({ with defineConfig({ server: { https: { ... }},
       if (existingConfig.includes('defineConfig({')) {
         existingConfig = existingConfig.replace(
-          'defineConfig({', 
+          'defineConfig({',
           `defineConfig({
   server: {
     https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'ssl/key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'ssl/cert.pem')),
+      key: fs.readFileSync('./ssl/key.pem'),
+      cert: fs.readFileSync('./ssl/cert.pem'),
     }
   },`
         );
-        
-        // Ajouter les imports si nécessaire
+
+        // Add imports if necessary
         if (!existingConfig.includes('import fs from')) {
           existingConfig = `import fs from 'fs';\nimport path from 'path';\n${existingConfig}`;
         }
-        
+
         await fs.writeFile(configPath, existingConfig);
       } else {
-        // Si on ne peut pas modifier le fichier, le remplacer
+        // If we can't modify the file, replace it
         await fs.writeFile(configPath, viteConfigContent);
       }
     }
   }
 
-  console.log(
-    chalk.green(
-      'Vite configuré! Utilisez "npm run dev" pour démarrer avec HTTPS.'
-    )
-  );
+  console.log(chalk.green('Vite configured! Use "npm run dev" to start with HTTPS.'));
 }

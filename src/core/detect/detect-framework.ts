@@ -12,9 +12,7 @@ import { promptFramework } from './prompt-framework.js';
  * @param projectPath - Path to the project
  * @returns The detected framework
  */
-export async function detectFramework(
-  projectPath: string
-): Promise<FrameworkType> {
+export async function detectFramework(projectPath: string): Promise<FrameworkType> {
   try {
     console.log(chalk.blue('Detecting framework...'));
 
@@ -22,9 +20,7 @@ export async function detectFramework(
     const packageJsonPath = path.join(projectPath, 'package.json');
     if (!(await fs.pathExists(packageJsonPath))) {
       console.log(
-        chalk.yellow(
-          'No package.json file found. Unable to automatically detect the framework.'
-        )
+        chalk.yellow('No package.json file found. Unable to automatically detect the framework.')
       );
       return promptFramework();
     }
@@ -58,15 +54,10 @@ export async function detectFramework(
     }
 
     // If no framework is detected, ask the user
-    console.log(
-      chalk.yellow('Unable to automatically detect the framework.')
-    );
+    console.log(chalk.yellow('Unable to automatically detect the framework.'));
     return promptFramework();
   } catch (error) {
-    console.error(
-      chalk.red('Error detecting framework:'),
-      error
-    );
+    console.error(chalk.red('Error detecting framework:'), error);
     return promptFramework();
   }
 }

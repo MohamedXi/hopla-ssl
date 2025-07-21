@@ -1,5 +1,5 @@
 /**
- * Export des fonctionnalités du module d'utilitaires
+ * Export of utilities module features
  */
 
 export * from './file.js';

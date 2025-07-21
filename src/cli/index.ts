@@ -3,7 +3,11 @@
  */
 import chalk from 'chalk';
 import { Command } from 'commander';
-import { configureGenerateCommand, configureSetupCommand } from './commands/index.js';
+import {
+  configureGenerateCommand,
+  configureSetupCommand,
+  configureTrustCommand,
+} from './commands/index.js';
 
 /**
  * Configure and run the CLI
@@ -19,6 +23,7 @@ export function runCLI(): void {
   // Configure commands
   configureGenerateCommand(program);
   configureSetupCommand(program);
+  configureTrustCommand(program);
 
   // Display help if no command is specified
   if (process.argv.length <= 2) {
@@ -31,7 +36,7 @@ export function runCLI(): void {
     if (err.code === 'commander.helpDisplayed') {
       process.exit(0);
     }
-    
+
     console.error(chalk.red('❌ Error:'), err.message);
     process.exit(1);
   });

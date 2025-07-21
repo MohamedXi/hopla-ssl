@@ -14,7 +14,7 @@ import {
   setupSvelte,
   setupVite,
   setupVueCli,
-  setupWebpack
+  setupWebpack,
 } from './frameworks/index.js';
 
 /**
@@ -29,62 +29,53 @@ export async function setupProject({
   countryCode,
   state,
   locality,
-  validity
+  validity,
 }: SetupProjectOptions): Promise<void> {
   try {
-    console.log(
-      chalk.blue(`Configuring ${framework} project for HTTPS...`)
-    );
+    console.log(chalk.blue(`Configuring ${framework} project for HTTPS...`));
 
     // Generate certificates in the project folder
     const sslDir = path.join(projectPath, 'ssl');
-    const certPaths = await generateCertificate(domain, sslDir, {
+    await generateCertificate(domain, sslDir, {
       organization,
       countryCode,
       state,
       locality,
-      validity
+      validity,
     });
 
     // Configure the project based on the framework
     switch (framework as FrameworkType) {
       case 'nextjs':
-        await setupNextJs(projectPath, certPaths);
+        await setupNextJs(projectPath);
         break;
       case 'create-react-app':
-        await setupCRA(projectPath, certPaths);
+        await setupCRA(projectPath);
         break;
       case 'angular':
-        await setupAngular(projectPath, certPaths);
+        await setupAngular(projectPath);
         break;
       case 'vue-cli':
-        await setupVueCli(projectPath, certPaths);
+        await setupVueCli(projectPath);
         break;
       case 'vite-vue':
       case 'vite':
-        await setupVite(projectPath, certPaths);
+        await setupVite(projectPath);
         break;
       case 'svelte':
-        await setupSvelte(projectPath, certPaths);
+        await setupSvelte(projectPath);
         break;
       case 'webpack':
-        await setupWebpack(projectPath, certPaths);
+        await setupWebpack(projectPath);
         break;
       default:
-        console.log(
-          chalk.yellow(
-            `The framework ${framework} is not directly supported.`
-          )
-        );
-        await setupGeneric(projectPath, certPaths);
+        console.log(chalk.yellow(`The framework ${framework} is not directly supported.`));
+        await setupGeneric(projectPath);
     }
 
     console.log(chalk.green('✅ Configuration complete!'));
   } catch (error) {
-    console.error(
-      chalk.red('Error configuring project:'),
-      error
-    );
+    console.error(chalk.red('Error configuring project:'), error);
     throw error;
   }
 }

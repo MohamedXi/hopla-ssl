@@ -1,9 +1,9 @@
 /**
- * Types pour le package hopla-ssl
+ * Types for the hopla-ssl package
  */
 
 /**
- * Types pour mkcert
+ * Types for mkcert
  */
 export interface CertificateAuthorityOptions {
   organization: string;
@@ -14,7 +14,7 @@ export interface CertificateAuthorityOptions {
 }
 
 /**
- * Options pour la génération de certificat
+ * Options for certificate generation
  */
 export interface CertificateOptions {
   domains: string[];
@@ -24,7 +24,7 @@ export interface CertificateOptions {
 }
 
 /**
- * Résultat de la génération de certificat
+ * Certificate generation result
  */
 export interface CertificateResult {
   key: string;
@@ -33,7 +33,7 @@ export interface CertificateResult {
 }
 
 /**
- * Options pour la configuration d'un projet
+ * Options for project configuration
  */
 export interface SetupProjectOptions {
   projectPath: string;
@@ -42,9 +42,9 @@ export interface SetupProjectOptions {
 }
 
 /**
- * Types de frameworks supportés
+ * Supported frameworks types
  */
-export type FrameworkType = 
+export type FrameworkType =
   | 'nextjs'
   | 'create-react-app'
   | 'angular'
@@ -57,7 +57,7 @@ export type FrameworkType =
   | 'other';
 
 /**
- * Structure de package.json
+ * Structure of package.json
  */
 export interface PackageJson {
   name?: string;
@@ -69,7 +69,7 @@ export interface PackageJson {
 }
 
 /**
- * Options pour la commande generate
+ * Options for the generate command
  */
 export interface GenerateCommandOptions {
   domain: string;
@@ -77,7 +77,7 @@ export interface GenerateCommandOptions {
 }
 
 /**
- * Options pour la commande setup
+ * Options for the setup command
  */
 export interface SetupCommandOptions {
   path: string;
@@ -86,7 +86,7 @@ export interface SetupCommandOptions {
 }
 
 /**
- * Type pour les choix de framework dans l'interface utilisateur
+ * Type for framework choices in the user interface
  */
 export interface FrameworkChoice {
   name: string;

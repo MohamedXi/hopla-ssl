@@ -1,48 +1,48 @@
 /**
- * Module d'utilitaires pour la journalisation
+ * Module of utilities for logging
  */
 import chalk from 'chalk';
 
 /**
- * Classe utilitaire pour la journalisation
+ * Utility class for logging
  */
 export class Logger {
   /**
-   * Affiche un message d'information
-   * @param message - Message à afficher
+   * Displays an information message
+   * @param message - Message to display
    */
   static info(message: string): void {
     console.log(chalk.blue(`ℹ️ ${message}`));
   }
 
   /**
-   * Affiche un message de succès
-   * @param message - Message à afficher
+   * Displays a success message
+   * @param message - Message to display
    */
   static success(message: string): void {
     console.log(chalk.green(`✅ ${message}`));
   }
 
   /**
-   * Affiche un message d'erreur
-   * @param message - Message à afficher
-   * @param error - Erreur optionnelle
+   * Displays an error message
+   * @param message - Message to display
+   * @param error - Optional error
    */
   static error(message: string, error?: unknown): void {
     console.error(chalk.red(`❌ ${message}`), error || '');
   }
 
   /**
-   * Affiche un message d'avertissement
-   * @param message - Message à afficher
+   * Displays a warning message
+   * @param message - Message to display
    */
   static warning(message: string): void {
     console.log(chalk.yellow(`⚠️ ${message}`));
   }
 
   /**
-   * Affiche un message de débogage
-   * @param message - Message à afficher
+   * Displays a debug message
+   * @param message - Message to display
    */
   static debug(message: string): void {
     if (process.env.DEBUG) {
