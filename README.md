@@ -23,6 +23,30 @@ Hopla SSL is a command-line utility that makes it easy to set up HTTPS for local
 npm install --save-dev hopla-ssl
 ```
 
+### Global installation
+
+Installing globally allows you to use the `hopla-ssl` command directly from any directory:
+
+```bash
+npm install -g hopla-ssl
+
+# Now you can use it from anywhere
+hopla-ssl setup
+```
+
+#### For development (installing from source)
+
+If you're developing hopla-ssl, you can install your local version globally:
+
+```bash
+# From the hopla-ssl project directory
+npm run build
+npm install -g .
+
+# Now your local version is available globally
+hopla-ssl --version
+```
+
 ### Usage without installation
 
 ```bash
@@ -68,12 +92,24 @@ Options:
 
 Install the SSL certificate in your system trust store to avoid browser warnings:
 
+#### If installed as a dev dependency
+
 ```bash
 # On macOS and Linux, sudo is required
 sudo npx hopla-ssl trust
 
 # On Windows (run as Administrator)
 npx hopla-ssl trust
+```
+
+#### If installed globally
+
+```bash
+# On macOS and Linux
+sudo hopla-ssl trust
+
+# On Windows (run as Administrator)
+hopla-ssl trust
 ```
 
 > **Note**: Installing certificates in the system trust store requires administrator privileges.
@@ -95,10 +131,23 @@ npx hopla-ssl --help
 
 ### Configure a Next.js project
 
+#### Using as a dev dependency (recommended for projects)
+
 ```bash
 cd my-nextjs-project
 npm install --save-dev hopla-ssl
 npx hopla-ssl setup
+```
+
+#### Using global installation
+
+```bash
+# Install globally once
+npm install -g hopla-ssl
+
+# Then use in any project
+cd my-nextjs-project
+hopla-ssl setup
 ```
 
 During setup, you'll be asked if you want to install the certificate in your system trust store. If you choose yes, the certificate will be automatically installed, avoiding browser warnings.
@@ -112,15 +161,29 @@ npm run dev:https
 If you didn't install the certificate during setup, you can do it later:
 
 ```bash
+# If installed as dev dependency
 npx hopla-ssl trust
+
+# If installed globally
+sudo hopla-ssl trust  # On macOS/Linux
+hopla-ssl trust       # On Windows (run as Administrator)
 ```
 
 ### Configure a React project
+
+#### Using as a dev dependency
 
 ```bash
 cd my-react-project
 npm install --save-dev hopla-ssl
 npx hopla-ssl setup
+```
+
+#### Using global installation
+
+```bash
+cd my-react-project
+hopla-ssl setup
 ```
 
 After configuration, you can start your server with HTTPS:
@@ -177,7 +240,9 @@ npm run build
 
 ### Testing Locally
 
-To test your changes locally without publishing to npm:
+There are several ways to test your changes locally:
+
+#### 1. Using npm link
 
 ```bash
 # Link the package globally
@@ -185,13 +250,42 @@ npm link
 
 # In your test project directory
 npm link hopla-ssl
+
+# Now you can run it in your test project
+npx hopla-ssl setup
 ```
 
-Alternatively, you can use the package directly from your local directory:
+#### 2. Installing your local version globally
+
+```bash
+# From the hopla-ssl project directory
+npm install -g .
+
+# Now you can use it from anywhere
+hopla-ssl setup
+
+# When you make changes, rebuild and reinstall
+npm run build
+npm install -g .
+```
+
+#### 3. Running directly from source
 
 ```bash
 # In your test project
 npx /path/to/your/local/hopla-ssl/directory setup
+```
+
+#### 4. Development workflow with watch mode
+
+```bash
+# Start TypeScript in watch mode
+npm run dev
+
+# In another terminal, test your changes
+npm start -- setup
+# or
+node dist/index.js setup
 ```
 
 ## Versioning
