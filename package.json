@@ -1,0 +1,56 @@
+{
+  "name": "hopla-ssl",
+  "version": "1.0.0",
+  "description": "Simple tool to generate and install SSL certificates in local JavaScript projects",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "hopla-ssl": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ssl",
+    "certificate",
+    "https",
+    "local",
+    "development",
+    "react",
+    "vue",
+    "angular",
+    "nextjs",
+    "devtools"
+  ],
+  "author": "Hopla SSL Team",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/hopla-ssl"
+  },
+  "bugs": {
+    "url": "https://github.com/username/hopla-ssl/issues"
+  },
+  "homepage": "https://github.com/username/hopla-ssl#readme",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^14.0.0",
+    "fs-extra": "^11.3.0",
+    "inquirer": "^12.8.0",
+    "mkcert": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/inquirer": "^9.0.8",
+    "@types/node": "^24.0.15",
+    "typescript": "^5.8.3"
+  }
+}
